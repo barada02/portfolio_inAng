@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { CertificatesComponent } from './components/certificates/certificates.component';
 import { ExperienceComponent } from './components/experience/experience.component';
 import { AboutComponent } from './components/about/about.component';
-import { ElementRef, HostListener, ViewChild } from '@angular/core';
+import { EducationComponent } from './components/education/education.component';
+import { SkillsComponent } from './components/skills/skills.component';
+import { AchievementsComponent } from './components/achievements/achievements.component';
+
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet,
     CommonModule,
@@ -16,7 +20,9 @@ import { ElementRef, HostListener, ViewChild } from '@angular/core';
     CertificatesComponent,
     ExperienceComponent,
     AboutComponent,
-    NgFor
+    EducationComponent,
+    SkillsComponent,
+    AchievementsComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -29,7 +35,10 @@ export class AppComponent {
   sections = [
     { id: 'about', name: 'About' },
     { id: 'experience', name: 'Experience' },
+    { id: 'education', name: 'Education' },
+    { id: 'skills', name: 'Skills' },
     { id: 'projects', name: 'Projects' },
+    { id: 'achievements', name: 'Achievements' },
     { id: 'certificates', name: 'Certificates' }
   ];
 

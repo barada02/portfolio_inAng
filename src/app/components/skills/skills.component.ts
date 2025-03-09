@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-about',
+  selector: 'app-skills',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
 })
-export class AboutComponent {}
+export class SkillsComponent {}
