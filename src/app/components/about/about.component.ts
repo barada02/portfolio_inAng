@@ -28,7 +28,7 @@ import { Component } from '@angular/core';
     h2 {
       font-size: 2rem;
       margin-bottom: 2rem;
-      color: #64ffda;
+      color: #ccd6f6;
     }
     
     .about-content {
@@ -39,6 +39,10 @@ import { Component } from '@angular/core';
       font-size: 1.1rem;
       line-height: 1.7;
       margin-bottom: 1.5rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
     }
   `]
 })
