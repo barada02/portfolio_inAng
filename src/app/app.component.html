@@ -2,9 +2,9 @@
   <!-- Left Sidebar -->
   <div class="sidebar">
     <div class="profile">
-      <img src="https://cdn-icons-png.freepik.com/256/4803/4803060.png?semt=ais_hybrid" alt="Profile" class="profile-img">
       <h2>Your Name</h2>
-      <p>Web Developer</p>
+      <p>Front End Engineer</p>
+      <p class="bio">I build accessible, pixel-perfect digital experiences for the web.</p>
     </div>
     <nav class="navigation">
       <a 
@@ -20,17 +20,17 @@
 
   <!-- Right Content -->
   <div class="content" #contentSection>
+    <section id="about" class="section">
+      <app-about></app-about>
+    </section>
+    <section id="experience" class="section">
+      <app-experience></app-experience>
+    </section>
     <section id="projects" class="section">
       <app-projects></app-projects>
     </section>
     <section id="certificates" class="section">
       <app-certificates></app-certificates>
-    </section>
-    <section id="experience" class="section">
-      <app-experience></app-experience>
-    </section>
-    <section id="social" class="section">
-      <app-social></app-social>
     </section>
   </div>
 </div>

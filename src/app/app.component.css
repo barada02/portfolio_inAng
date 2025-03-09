@@ -1,31 +1,60 @@
 .portfolio-container {
     display: flex;
     min-height: 100vh;
+    background-color: #151922;
+    color: #ffffff;
 }
 
 .sidebar {
-    width: 300px;
+    width: 40%;
     position: fixed;
     left: 0;
     top: 0;
     height: 100vh;
-    background-color: #f8f9fa;
+    background-color: #0f1218;
     padding: 2rem;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .profile {
-    text-align: center;
-    margin-bottom: 2rem;
+    text-align: left;
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+    max-width: 540px;
+}
+
+.profile h2 {
+    font-size: 3.5rem;
+    margin: 0 0 0.5rem;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+.profile p {
+    color: #8892b0;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.profile .bio {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #8892b0;
+    margin-top: 1.5rem;
 }
 
 .profile-img {
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    border: 3px solid #1e2736;
 }
 
 .profile-img:hover {
@@ -36,34 +65,37 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding: 0 1rem;
 }
 
 .navigation a {
     text-decoration: none;
-    color: #333;
-    padding: 0.8rem 1.2rem;
+    color: #8892b0;
+    padding: 1rem 1.5rem;
     border-radius: 8px;
     transition: all 0.3s ease;
     font-weight: 500;
-    position: relative;
-    overflow: hidden;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
 }
 
 .navigation a:hover {
-    background-color: #e9ecef;
+    background-color: #1e2736;
+    color: #ffffff;
     transform: translateX(5px);
 }
 
 .navigation a.active-section {
-    background-color: #007bff;
-    color: white;
+    background-color: #1e2736;
+    color: #64ffda;
     transform: translateX(10px);
 }
 
 .content {
-    margin-left: 300px;
+    margin-left: 40%;
     flex: 1;
-    padding: 2rem;
+    padding: 2rem 3rem;
+    background-color: #151922;
 }
 
 .section {
@@ -73,4 +105,9 @@
     flex-direction: column;
     justify-content: center;
     scroll-margin-top: 2rem;
+}
+
+/* Add smooth scrolling to the whole page */
+html {
+    scroll-behavior: smooth;
 }

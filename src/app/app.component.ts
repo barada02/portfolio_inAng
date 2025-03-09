@@ -1,33 +1,39 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import{CommonModule,NgFor} from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { CertificatesComponent } from './components/certificates/certificates.component';
 import { ExperienceComponent } from './components/experience/experience.component';
-import { SocialComponent } from './components/social/social.component';
+import { AboutComponent } from './components/about/about.component';
 import { ElementRef, HostListener, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,CommonModule, ProjectsComponent, CertificatesComponent, ExperienceComponent, SocialComponent,NgFor],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    ProjectsComponent,
+    CertificatesComponent,
+    ExperienceComponent,
+    AboutComponent,
+    NgFor
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'portfolio_inAng';
 
-
-
   @ViewChild('contentSection') contentSection!: ElementRef;
 
   sections = [
-    { id: 'projects', name: 'Projects' },
-    { id: 'certificates', name: 'Certificates' },
+    { id: 'about', name: 'About' },
     { id: 'experience', name: 'Experience' },
-    { id: 'social', name: 'Social' }
+    { id: 'projects', name: 'Projects' },
+    { id: 'certificates', name: 'Certificates' }
   ];
 
-  currentSection = 'projects';
+  currentSection = 'about';
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
