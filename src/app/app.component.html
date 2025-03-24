@@ -1,45 +1,68 @@
-<div class="portfolio-container">
-  <!-- Left Sidebar -->
-  <div class="sidebar">
+<!-- Home Section -->
+<div class="home-section" *ngIf="!showPortfolio">
+  <div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+  <img src="assets/profile.jpg" alt="Profile" class="profile-pic">
+  <h1>Welcome to My Interactive Resume</h1>
+  <button (click)="showResume()">View Resume</button>
+  <button (click)="openAdminLogin()">Admin Login</button>
+</div>
+
+<!-- Admin Login Modal -->
+<div class="admin-login-modal" *ngIf="showAdminLogin">
+  <div class="admin-login-box">
+    <h2>Admin Login</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button (click)="closeAdminLogin()">Close</button>
+  </div>
+</div>
+
+<!-- Portfolio Page -->
+<div class="portfolio-container" *ngIf="showPortfolio">
+  <nav class="sidebar">
     <div class="profile">
-      <h2>Your Name</h2>
-      <p>Front End Engineer</p>
-      <p class="bio">I build accessible, pixel-perfect digital experiences for the web.</p>
+      <img src="assets/profile.jpg" class="profile-img-small" alt="Profile">
+      <h2 class="profile-name">Sai Ram</h2>
     </div>
-    <nav class="navigation">
-      <a 
-        *ngFor="let section of sections" 
-        [href]="'#' + section.id"
-        [class.active-section]="currentSection === section.id"
-        (click)="scrollToSection($event, section.id)"
-      >
+    <div class="navigation">
+      <a *ngFor="let section of sections" (click)="scrollToSection($event, section.id)" 
+         [class.active-section]="currentSection === section.id">
         {{ section.name }}
       </a>
-    </nav>
-  </div>
+    </div>
+  </nav>
 
-  <!-- Right Content -->
-  <div class="content" #contentSection>
-    <section id="about" class="section">
+  <!-- Dynamic Content -->
+  <div class="content">
+    <section id="about" data-section="about">
       <app-about></app-about>
     </section>
-    <section id="experience" class="section">
+    <section id="experience" data-section="experience">
       <app-experience></app-experience>
     </section>
-    <section id="education" class="section">
+    <section id="education" data-section="education">
       <app-education></app-education>
     </section>
-    <section id="skills" class="section">
+    <section id="skills" data-section="skills">
       <app-skills></app-skills>
     </section>
-    <section id="projects" class="section">
+    <section id="projects" data-section="projects">
       <app-projects></app-projects>
     </section>
-    <section id="achievements" class="section">
+    <section id="achievements" data-section="achievements">
       <app-achievements></app-achievements>
     </section>
-    <section id="certificates" class="section">
+    <section id="certificates" data-section="certificates">
       <app-certificates></app-certificates>
+    </section>
+    <section id="contactus" data-section="contactus">
+      <app-contactus></app-contactus>
     </section>
   </div>
 </div>

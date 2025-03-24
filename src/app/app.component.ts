@@ -1,20 +1,20 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ProjectsComponent } from './components/projects/projects.component';
-import { CertificatesComponent } from './components/certificates/certificates.component';
-import { ExperienceComponent } from './components/experience/experience.component';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { provideLottieOptions } from 'ngx-lottie';
 import { AboutComponent } from './components/about/about.component';
-import { EducationComponent } from './components/education/education.component';
-import { SkillsComponent } from './components/skills/skills.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
+import { CertificatesComponent } from './components/certificates/certificates.component';
+import { ContactusComponent } from './components/contactus/contactus.component';
+import { EducationComponent } from './components/education/education.component';
+import { ExperienceComponent } from './components/experience/experience.component';
+import { ProjectsComponent } from './components/projects/projects.component';
+import { SkillsComponent } from './components/skills/skills.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     CommonModule,
     ProjectsComponent,
     CertificatesComponent,
@@ -22,15 +22,23 @@ import { AchievementsComponent } from './components/achievements/achievements.co
     AboutComponent,
     EducationComponent,
     SkillsComponent,
-    AchievementsComponent
+    AchievementsComponent,
+    ContactusComponent,
+  ],
+  providers: [
+    provideLottieOptions({ player: () => import('lottie-web') })
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'portfolio_inAng';
-
-  @ViewChild('contentSection') contentSection!: ElementRef;
+  showPortfolio = false;
+  currentSection = 'about';
+  showAdminLogin = false;
+  adminUsername = '';
+  adminPassword = '';
+  loginError = false;
 
   sections = [
     { id: 'about', name: 'About' },
@@ -39,23 +47,32 @@ export class AppComponent {
     { id: 'skills', name: 'Skills' },
     { id: 'projects', name: 'Projects' },
     { id: 'achievements', name: 'Achievements' },
-    { id: 'certificates', name: 'Certificates' }
+    { id: 'certificates', name: 'Certificates' },
+    { id: 'contactus', name: 'Contact Us' }
   ];
 
-  currentSection = 'about';
+  @ViewChild('contentSection') contentSection!: ElementRef;
+
+  showResume() {
+    this.showPortfolio = true;
+    setTimeout(() => this.scrollToTop(), 100);
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    const sections = document.querySelectorAll('.section');
     const scrollPosition = window.scrollY;
-
-    sections.forEach((section) => {
-      const sectionTop = (section as HTMLElement).offsetTop;
-      const sectionHeight = (section as HTMLElement).clientHeight;
-
-      if (scrollPosition >= sectionTop - 200 && 
-          scrollPosition < sectionTop + sectionHeight - 200) {
-        this.currentSection = section.id;
+    this.sections.forEach(section => {
+      const element = document.getElementById(section.id);
+      if (element) {
+        const sectionTop = element.offsetTop;
+        const sectionHeight = element.clientHeight;
+        if (scrollPosition >= sectionTop - 200 && scrollPosition < sectionTop + sectionHeight - 200) {
+          this.currentSection = section.id;
+        }
       }
     });
   }
@@ -65,6 +82,23 @@ export class AppComponent {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  openAdminLogin() {
+    this.showAdminLogin = true;
+  }
+
+  closeAdminLogin() {
+    this.showAdminLogin = false;
+  }
+
+  loginAdmin() {
+    if (this.adminUsername === 'sairam' && this.adminPassword === 'sai123') {
+      alert('Login Successful!');
+      this.closeAdminLogin();
+    } else {
+      this.loginError = true;
     }
   }
 }

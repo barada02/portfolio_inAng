@@ -1,141 +1,256 @@
+/* General Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  scroll-behavior: smooth;
+  background-color: #0f1218;
+  color: white;
+}
+
+/* Home Section */
+.home-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #ffcc00;
+  color: black;
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #e6b800;
+}
+
+/* Admin Login Modal */
+.admin-login-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-login-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: black;
+  width: 300px;
+}
+
+input {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.error {
+  color: red;
+}
+
+/* Portfolio */
 .portfolio-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #0f1218;
-    color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  background-color: #0f1218;
+  color: white;
+  min-height: 100vh;
+  padding-left: 250px;
 }
 
-.sidebar {
-    width: 40%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    background-color: #0f1218;
-    padding: 2rem;
-    border-right: 1px solid rgba(136, 146, 176, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+/* Sidebar Styles */
+ /* Sidebar */
+ .sidebar {
+  width: 180px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: #0f1218;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* Default Sidebar Link Styles */
+.navigation a {
+  text-decoration: none;
+  color: #8892b0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+/* Active Sidebar Link Highlight */
+.navigation a.active {
+  background-color: rgba(255, 255, 0, 0.2); /* Yellow Transparent */
+  color: yellow;
+  font-weight: bold;
+  transition: background-color 0.5s ease-in-out;
+}
+
+/* Profile Section */
 .profile {
-    text-align: left;
-    margin-bottom: 3rem;
-    padding: 0 1rem;
-    max-width: 540px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.profile h2 {
-    font-size: 3.5rem;
-    margin: 0 0 0.5rem;
-    color: #ccd6f6;
-    font-weight: 600;
-    letter-spacing: -1px;
+.profile-img-small {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid red;
+  object-fit: cover;
 }
 
-.profile p {
-    color: #8892b0;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+.profile-name {
+  font-size: 18px;
+  margin-top: 10px;
+  font-weight: bold;
 }
 
-.profile .bio {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #8892b0;
-    margin-top: 1.5rem;
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: #0f1218;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.profile-img {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    margin-bottom: 1.5rem;
-    border: 3px solid #1e2736;
+/* Profile Info */
+.profile {
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-.profile-img:hover {
-    transform: scale(1.05);
+.profile-img-small {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid red;
+  object-fit: cover;
 }
 
-.navigation {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding: 0 1rem;
-    margin-top: 2rem;
+.profile-name {
+  font-size: 1.5rem;
+  color: #ccd6f6;
+  margin-top: 0.5rem;
+}
+
+ /* Navigation */
+ .navigation {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
 }
 
 .navigation a {
-    text-decoration: none;
-    color: #8892b0;
-    padding: 0.7rem 1.2rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    position: relative;
-    display: flex;
-    align-items: center;
+  text-decoration: none;
+  color: #8892b0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: pointer;
 }
 
-.navigation a::before {
-    content: "▹";
-    color: #64ffda;
-    margin-right: 0.8rem;
-    font-size: 0.8rem;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s ease;
-}
-
-.navigation a:hover {
-    background-color: rgba(136, 146, 176, 0.1);
-    color: #ccd6f6;
-    transform: translateX(5px);
-}
-
-.navigation a:hover::before {
-    opacity: 1;
-    transform: translateX(0);
-}
-
+.navigation a:hover,
 .navigation a.active-section {
-    background-color: rgba(100, 255, 218, 0.1);
-    color: #64ffda;
-    transform: translateX(10px);
+  background-color: rgba(255, 255, 0, 0.2);
+  color: yellow;
 }
 
-.navigation a.active-section::before {
-    opacity: 1;
-    transform: translateX(0);
-}
-
+/* Content Layout */
 .content {
-    margin-left: 40%;
-    flex: 1;
-    padding: 2rem 3rem;
-    background-color: #0f1218;
+  margin-left: 150px;
+  padding: 2rem;
+  flex-grow: 1;
 }
 
+/* Sections */
 .section {
-    min-height: 100vh;
-    padding: 4rem 2rem;
-    display: flex;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 2rem;
+  }
+
+  .portfolio-content {
     flex-direction: column;
-    justify-content: center;
-    scroll-margin-top: 2rem;
-    border-bottom: 1px solid rgba(136, 146, 176, 0.1);
+  }
 }
 
-.section:last-child {
-    border-bottom: none;
+@media (max-width: 768px) {
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+
+  .section {
+    padding: 3rem 1rem;
+  }
 }
 
-/* Add smooth scrolling to the whole page */
-html {
-    scroll-behavior: smooth;
-    background-color: #0f1218;
-}
