@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export interface ProfileInfo {
   name: string;
@@ -14,7 +15,7 @@ export interface ProfileInfo {
   providedIn: 'root'
 })
 export class ProfileService {
-  private firebaseBaseUrl = 'https://angulartest-93e44-default-rtdb.asia-southeast1.firebasedatabase.app';
+  private firebaseBaseUrl = environment.firebaseConfig.baseUrl;
   private defaultProfileInfo: ProfileInfo = {
     name: 'Sai Ram',
     title: 'Software Developer',

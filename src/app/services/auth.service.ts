@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AuthService {
   public isAdmin$: Observable<boolean> = this.isAdminSubject.asObservable();
   private currentUsernameSubject = new BehaviorSubject<string>('');
   public currentUsername$ = this.currentUsernameSubject.asObservable();
-  private firebaseUrl = 'https://angulartest-93e44-default-rtdb.asia-southeast1.firebasedatabase.app';
+  private firebaseUrl = environment.firebaseConfig.baseUrl;
   private usersUrl = `${this.firebaseUrl}/users.json`;
 
   constructor(private http: HttpClient) {

@@ -12,6 +12,42 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## Environment Configuration
+
+This project uses Firebase Realtime Database for storing and retrieving user-specific data. To set up your own environment:
+
+1. **Create Environment Files**:
+   - Look for `environment.template.ts` in the `src/environments/` directory
+   - Copy this file to create two new files:
+     - `environment.ts` (for development)
+     - `environment.prod.ts` (for production)
+
+2. **Configure Firebase**:
+   - Replace the placeholder Firebase URL with your own Firebase Realtime Database URL
+   - Example:
+   ```typescript
+   export const environment = {
+     production: false, // Set to true for environment.prod.ts
+     firebaseConfig: {
+       baseUrl: 'https://your-firebase-project-id.firebasedatabase.app'
+     }
+   };
+   ```
+
+3. **Security Note**:
+   - The environment files are already added to `.gitignore` to prevent exposing your Firebase URL
+   - Never commit these files to version control
+
+## Firebase Setup
+
+To set up your own Firebase project:
+
+1. Go to the [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Set up a Realtime Database
+4. Copy the database URL for your environment files
+5. Set up appropriate security rules for your database
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
