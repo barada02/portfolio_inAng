@@ -47,6 +47,144 @@ button:hover {
   background-color: #e6b800;
 }
 
+/* Admin Button */
+.admin-button-container {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.admin-button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-button:hover {
+  background-color: #444;
+  border-color: #666;
+}
+
+/* Admin Login Modal */
+.admin-login-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.admin-login-box {
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  width: 350px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.admin-login-box h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #ffcc00;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.login-button, .cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-button {
+  background-color: #ffcc00;
+  color: #000;
+}
+
+.login-button:hover {
+  background-color: #e6b800;
+}
+
+.cancel-button {
+  background-color: #444;
+  color: #fff;
+}
+
+.cancel-button:hover {
+  background-color: #555;
+}
+
+/* Edit Button Styles */
+.edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ffcc00;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #e6b800;
+}
+
+.edit-button i {
+  font-size: 16px;
+}
+
 /* Admin Login Modal */
 .admin-login-modal {
   position: fixed;
@@ -253,4 +391,3 @@ input {
     padding: 3rem 1rem;
   }
 }
-

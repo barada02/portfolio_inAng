@@ -10,31 +10,39 @@
   <img src="assets/profile.jpg" alt="Profile" class="profile-pic">
   <h1>Welcome to My Interactive Resume</h1>
   <button (click)="showResume()">View Resume</button>
-  <button (click)="openAdminLogin()">Admin Login</button>
-</div>
-
-<!-- Admin Login Modal -->
-<div class="admin-login-modal" *ngIf="showAdminLogin">
-  <div class="admin-login-box">
-    <h2>Admin Login</h2>
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
-    <button (click)="closeAdminLogin()">Close</button>
-  </div>
 </div>
 
 <!-- Portfolio Page -->
+<!---Left Sidebar-->
 <div class="portfolio-container" *ngIf="showPortfolio">
+  <!-- Sidebar Navigation -->
   <nav class="sidebar">
     <div class="profile">
       <img src="assets/profile.jpg" class="profile-img-small" alt="Profile">
       <h2 class="profile-name">Sai Ram</h2>
     </div>
     <div class="navigation">
-      <a *ngFor="let section of sections" (click)="scrollToSection($event, section.id)" 
-         [class.active-section]="currentSection === section.id">
-        {{ section.name }}
+      <a (click)="scrollToSection('about')" [class.active-section]="activeSection === 'about'">
+        About
       </a>
+      <a (click)="scrollToSection('experience')" [class.active-section]="activeSection === 'experience'">
+        Experience
+      </a>
+      <a (click)="scrollToSection('education')" [class.active-section]="activeSection === 'education'">
+        Education
+      </a>
+      <a (click)="scrollToSection('skills')" [class.active-section]="activeSection === 'skills'">
+        Skills
+      </a>
+      <a (click)="scrollToSection('projects')" [class.active-section]="activeSection === 'projects'">
+        Projects
+      </a>
+      <a (click)="scrollToSection('contact')" [class.active-section]="activeSection === 'contact'">
+        Contact
+      </a>
+      <div class="admin-button-container">
+        <button class="admin-button" (click)="showAdminLoginModal()">Admin</button>
+      </div>
     </div>
   </nav>
 
@@ -55,14 +63,44 @@
     <section id="projects" data-section="projects">
       <app-projects></app-projects>
     </section>
-    <section id="achievements" data-section="achievements">
-      <app-achievements></app-achievements>
+    <section id="contact" data-section="contact">
+      <app-contact></app-contact>
     </section>
-    <section id="certificates" data-section="certificates">
-      <app-certificates></app-certificates>
-    </section>
-    <section id="contactus" data-section="contactus">
-      <app-contactus></app-contactus>
-    </section>
+  </div>
+</div>
+
+<!-- Admin Login/Signup Modal -->
+<div class="admin-login-modal" *ngIf="showAdminLogin">
+  <div class="admin-login-box">
+    <h2>{{ isSignup ? 'Admin Signup' : 'Admin Login' }}</h2>
+    
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading-indicator">
+      <div class="spinner"></div>
+      <p>Processing...</p>
+    </div>
+    
+    <div *ngIf="!isLoading">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" [(ngModel)]="username" placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="password" placeholder="Enter password">
+      </div>
+      <div class="error-message" *ngIf="loginError">
+        {{ loginError }}
+      </div>
+      <div class="button-group">
+        <button class="login-button" (click)="login()">{{ isSignup ? 'Sign Up' : 'Login' }}</button>
+        <button class="cancel-button" (click)="closeAdminLoginModal()">Cancel</button>
+      </div>
+      <div class="toggle-signup">
+        <a (click)="toggleSignupMode()">
+          {{ isSignup ? 'Already have an account? Login' : 'Need an account? Sign Up' }}
+        </a>
+      </div>
+    </div>
   </div>
 </div>
