@@ -1,12 +1,47 @@
 <h2>Experience</h2>
 <div class="experience-container" id="experience">
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+  
+  <!-- Edit button - only visible to admin users -->
+  <button *ngIf="isAdmin && !isEditing" class="edit-button" (click)="enableEditing()">
+    <i class="fas fa-edit"></i> Edit
+  </button>
+  
+  <!-- Editable experience section -->
+  <div *ngIf="isEditing" class="editing-container">
+    <div *ngFor="let exp of experiences; let i = index" class="experience-item-edit">
+      <div class="experience-form-group">
+        <label>Year:</label>
+        <input type="text" [(ngModel)]="exp.year" placeholder="Year">
+      </div>
+      <div class="experience-form-group">
+        <label>Description:</label>
+        <textarea [(ngModel)]="exp.description" placeholder="Description"></textarea>
+      </div>
+      <button class="remove-button" (click)="removeExperience(i)">
+        <i class="fas fa-trash"></i> Remove
+      </button>
+    </div>
     
-    <!-- Add your experience content here -->
-    <div class="experience" id="exp">
-      <h3>
-        2024 – <p>3months Python internship at MVG Innovations</p><br>
-        2024 (November) – <p>Frontend Developer at Tech Mindsparc Company</p> <br>
-        2024 – <p>NPTEL exam on Business Organisation and Management</p><br>
-        2025 (February) – <p>Presented a Conference Paper</p></h3>
+    <div class="edit-actions">
+      <button class="add-button" (click)="addExperience()">
+        <i class="fas fa-plus"></i> Add Experience
+      </button>
+      <button class="save-button" (click)="saveChanges()">
+        <i class="fas fa-save"></i> Save
+      </button>
+      <button class="cancel-button" (click)="cancelEditing()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
     </div>
   </div>
+  
+  <!-- Display experience section -->
+  <div *ngIf="!isEditing" class="experience" id="exp">
+    <div *ngFor="let exp of experiences" class="experience-item">
+      <span class="year">{{ exp.year }}</span>
+      <span class="description">{{ exp.description }}</span>
+    </div>
+  </div>
+</div>
