@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AboutComponent } from './components/about/about.component';
@@ -8,6 +8,9 @@ import { SkillsComponent } from './components/skills/skills.component';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { AuthService } from './services/auth.service';
+import { ProfileService, ProfileInfo } from './services/profile.service';
+import { HttpClientModule } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +18,7 @@ import { AuthService } from './services/auth.service';
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
     AboutComponent,
     ExperienceComponent,
     EducationComponent,
@@ -25,7 +29,7 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'portfolio_inAng';
   activeSection = 'about';
   showAdminLogin = false;
@@ -36,11 +40,114 @@ export class AppComponent implements OnInit {
   isSignup = false;
   isLoading = false;
   showPortfolio = false;
+  
+  // Profile related properties
+  profileInfo: ProfileInfo = {
+    name: 'Sai Ram',
+    title: 'Software Developer',
+    profileImage: 'assets/profile.jpg'
+  };
+  isEditingProfile = false;
+  profileError = '';
+  private authSubscription: Subscription | null = null;
+  private usernameSubscription: Subscription | null = null;
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private profileService: ProfileService) {}
 
   ngOnInit() {
     this.scrollToSection(this.activeSection);
+    
+    // Subscribe to the isAdmin$ Observable
+    this.authSubscription = this.authService.isAdmin$.subscribe(isAdmin => {
+      console.log('Admin status changed in app component:', isAdmin);
+      // Reload profile data when admin status changes
+      if (isAdmin) {
+        this.loadProfileData();
+      }
+    });
+
+    // Subscribe to username changes
+    this.usernameSubscription = this.authService.currentUsername$.subscribe(username => {
+      console.log('Username changed in app component:', username);
+      // Reload profile data when username changes
+      if (username) {
+        this.loadProfileData();
+      }
+    });
+
+    // Initial profile data load
+    this.loadProfileData();
+  }
+
+  ngOnDestroy() {
+    // Clean up subscriptions to prevent memory leaks
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+    if (this.usernameSubscription) {
+      this.usernameSubscription.unsubscribe();
+    }
+  }
+
+  loadProfileData() {
+    this.profileError = '';
+    // Fetch from Firebase using the ProfileService
+    this.profileService.getProfileData().subscribe(
+      (data: ProfileInfo) => {
+        if (data) {
+          this.profileInfo = data;
+        } else {
+          // If no data in Firebase, use default content
+          this.profileInfo = this.profileService.getDefaultProfileInfo();
+          // Save default content to Firebase if user is logged in
+          if (this.authService.currentUsername) {
+            this.saveProfileData();
+          }
+        }
+      },
+      (error) => {
+        this.profileError = 'Error loading profile data';
+        console.error('Error fetching profile data:', error);
+        // If error, use default content
+        this.profileInfo = this.profileService.getDefaultProfileInfo();
+      }
+    );
+  }
+
+  enableProfileEditing() {
+    // Only allow editing if the user is an admin
+    if (this.authService.isAdmin) {
+      this.isEditingProfile = true;
+    }
+  }
+
+  saveProfileChanges() {
+    // Only allow saving if the user is an admin
+    if (!this.authService.isAdmin || !this.authService.currentUsername) {
+      this.profileError = 'You must be logged in as an admin to save changes.';
+      return;
+    }
+    
+    this.isEditingProfile = false;
+    this.saveProfileData();
+  }
+
+  cancelProfileEditing() {
+    this.isEditingProfile = false;
+    // Reload the data to discard changes
+    this.loadProfileData();
+  }
+
+  private saveProfileData() {
+    this.profileService.saveProfileData(this.profileInfo).subscribe(
+      () => {
+        console.log('Profile data saved successfully');
+      },
+      (error) => {
+        this.profileError = 'Error saving profile data';
+        console.error('Error saving profile data:', error);
+      }
+    );
   }
 
   showResume() {
