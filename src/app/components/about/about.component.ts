@@ -19,27 +19,50 @@ export class AboutComponent implements OnInit, OnDestroy {
   isLoading = true;
   error = '';
   isAdmin = false;
+  currentUsername = '';
   private authSubscription: Subscription | null = null;
+  private usernameSubscription: Subscription | null = null;
 
   constructor(public authService: AuthService, private aboutService: AboutService) {
     // Initialize isAdmin from the AuthService, not directly from localStorage
     this.isAdmin = this.authService.isAdmin;
+    this.currentUsername = this.authService.currentUsername;
     console.log('Initial admin state:', this.isAdmin);
+    console.log('Initial username:', this.currentUsername);
   }
 
   ngOnInit() {
-    this.loadAboutContent();
     // Subscribe to the isAdmin$ Observable
     this.authSubscription = this.authService.isAdmin$.subscribe(isAdmin => {
       console.log('Admin status changed:', isAdmin);
       this.isAdmin = isAdmin;
+      // Reload content when admin status changes
+      if (isAdmin) {
+        this.loadAboutContent();
+      }
     });
+
+    // Subscribe to username changes
+    this.usernameSubscription = this.authService.currentUsername$.subscribe(username => {
+      console.log('Username changed:', username);
+      this.currentUsername = username;
+      // Reload content when username changes
+      if (username) {
+        this.loadAboutContent();
+      }
+    });
+
+    // Initial content load
+    this.loadAboutContent();
   }
 
   ngOnDestroy() {
-    // Clean up subscription to prevent memory leaks
+    // Clean up subscriptions to prevent memory leaks
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    if (this.usernameSubscription) {
+      this.usernameSubscription.unsubscribe();
     }
   }
 
@@ -55,8 +78,10 @@ export class AboutComponent implements OnInit, OnDestroy {
         } else {
           // If no data in Firebase, use default content
           this.aboutContent = this.aboutService.getDefaultContent();
-          // Save default content to Firebase
-          this.saveAboutContent();
+          // Save default content to Firebase if user is logged in
+          if (this.currentUsername) {
+            this.saveAboutContent();
+          }
         }
       },
       (error) => {
@@ -79,7 +104,8 @@ export class AboutComponent implements OnInit, OnDestroy {
 
   saveChanges() {
     // Only allow saving if the user is an admin
-    if (!this.isAdmin) {
+    if (!this.isAdmin || !this.currentUsername) {
+      this.error = 'You must be logged in as an admin to save changes.';
       return;
     }
     

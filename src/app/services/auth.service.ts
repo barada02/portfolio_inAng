@@ -9,18 +9,24 @@ import { map, catchError } from 'rxjs/operators';
 export class AuthService {
   private isAdminSubject = new BehaviorSubject<boolean>(false);
   public isAdmin$: Observable<boolean> = this.isAdminSubject.asObservable();
+  private currentUsernameSubject = new BehaviorSubject<string>('');
+  public currentUsername$ = this.currentUsernameSubject.asObservable();
   private firebaseUrl = 'https://angulartest-93e44-default-rtdb.asia-southeast1.firebasedatabase.app';
   private usersUrl = `${this.firebaseUrl}/users.json`;
 
   constructor(private http: HttpClient) {
     // Clear any existing admin state to ensure fresh login is required
     localStorage.removeItem('isAdmin');
+    localStorage.removeItem('currentUsername');
     this.isAdminSubject.next(false);
+    this.currentUsernameSubject.next('');
     
     // Uncomment below if you want to restore previous login state
     // const isLoggedIn = localStorage.getItem('isAdmin') === 'true';
     // if (isLoggedIn) {
     //   this.isAdminSubject.next(true);
+    //   const username = localStorage.getItem('currentUsername') || '';
+    //   this.currentUsernameSubject.next(username);
     // }
   }
 
@@ -88,7 +94,9 @@ export class AuthService {
             if (foundUser && foundUser.password === password) {
               // Login successful
               this.isAdminSubject.next(true);
+              this.currentUsernameSubject.next(username);
               localStorage.setItem('isAdmin', 'true');
+              localStorage.setItem('currentUsername', username);
               observer.next(true);
               observer.complete();
             } else {
@@ -112,10 +120,16 @@ export class AuthService {
 
   logout(): void {
     this.isAdminSubject.next(false);
+    this.currentUsernameSubject.next('');
     localStorage.removeItem('isAdmin');
+    localStorage.removeItem('currentUsername');
   }
 
   get isAdmin(): boolean {
     return this.isAdminSubject.value;
+  }
+
+  get currentUsername(): string {
+    return this.currentUsernameSubject.value;
   }
 }
