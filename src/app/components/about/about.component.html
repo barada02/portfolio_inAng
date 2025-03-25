@@ -2,7 +2,7 @@
   <h2>About Me</h2>
   
   <!-- Edit Button - Only visible when admin is logged in -->
-  <button *ngIf="authService.isAdmin" class="edit-button" (click)="enableEditing()">
+  <button *ngIf="isAdmin" class="edit-button" (click)="enableEditing()">
     <i class="fas fa-edit"></i> Edit
   </button>
   

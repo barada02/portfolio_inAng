@@ -13,14 +13,18 @@ export class AuthService {
   private usersUrl = `${this.firebaseUrl}/users.json`;
 
   constructor(private http: HttpClient) {
-    // Check if user is already logged in from localStorage
-    const isLoggedIn = localStorage.getItem('isAdmin') === 'true';
-    if (isLoggedIn) {
-      this.isAdminSubject.next(true);
-    }
+    // Clear any existing admin state to ensure fresh login is required
+    localStorage.removeItem('isAdmin');
+    this.isAdminSubject.next(false);
+    
+    // Uncomment below if you want to restore previous login state
+    // const isLoggedIn = localStorage.getItem('isAdmin') === 'true';
+    // if (isLoggedIn) {
+    //   this.isAdminSubject.next(true);
+    // }
   }
 
-  signup(username: string, password: string): Observable<any> {
+  signup(fullName: string, username: string, password: string): Observable<any> {
     // Since we can't use orderBy without proper indexing, let's fetch all users and filter manually
     return new Observable(observer => {
       this.http.get(this.usersUrl).subscribe(
@@ -37,6 +41,7 @@ export class AuthService {
           } else {
             // Create new user
             const newUser = {
+              fullName,
               username,
               password, // In a real app, this should be hashed
               isAdmin: true,

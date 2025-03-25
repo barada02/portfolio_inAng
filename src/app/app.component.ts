@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   title = 'portfolio_inAng';
   activeSection = 'about';
   showAdminLogin = false;
+  fullName = '';
   username = '';
   password = '';
   loginError = '';
@@ -79,6 +80,7 @@ export class AppComponent implements OnInit {
 
   showAdminLoginModal() {
     this.showAdminLogin = true;
+    this.fullName = '';
     this.username = '';
     this.password = '';
     this.loginError = '';
@@ -95,9 +97,18 @@ export class AppComponent implements OnInit {
   }
 
   login() {
-    if (!this.username || !this.password) {
-      this.loginError = 'Please enter both username and password';
-      return;
+    if (this.isSignup) {
+      // Validate signup fields
+      if (!this.fullName || !this.username || !this.password) {
+        this.loginError = 'Please enter full name, username and password';
+        return;
+      }
+    } else {
+      // Validate login fields
+      if (!this.username || !this.password) {
+        this.loginError = 'Please enter both username and password';
+        return;
+      }
     }
 
     this.isLoading = true;
@@ -105,7 +116,7 @@ export class AppComponent implements OnInit {
 
     if (this.isSignup) {
       // Handle signup
-      this.authService.signup(this.username, this.password).subscribe(
+      this.authService.signup(this.fullName, this.username, this.password).subscribe(
         () => {
           // After signup, login automatically
           this.authService.login(this.username, this.password).subscribe(
