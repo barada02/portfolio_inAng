@@ -1,29 +1,57 @@
 <div class="education-container">
   <h2>Education</h2>
-  <div class="education-list">
-    <div class="education-item">
-      <h3>Aurora University</h3>
-      <p class="degree">Master of Computer Applications(MCA)</p>
-      <p class="year">2023 - 2025</p>
-      <p class="description">
-        Relevant coursework: c++, Java, Python, Algorithms, Web Development, Database Management
-      </p>
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+  
+  <!-- Edit button - only visible to admin users -->
+  <button *ngIf="isAdmin && !isEditing" class="edit-button" (click)="enableEditing()">
+    <i class="fas fa-edit"></i> Edit
+  </button>
+  
+  <!-- Editable education section -->
+  <div *ngIf="isEditing" class="editing-container">
+    <div *ngFor="let item of educationItems; let i = index" class="education-item-edit">
+      <div class="education-form-group">
+        <label>Institution:</label>
+        <input type="text" [(ngModel)]="item.institution" placeholder="Institution Name">
+      </div>
+      <div class="education-form-group">
+        <label>Degree:</label>
+        <input type="text" [(ngModel)]="item.degree" placeholder="Degree/Major">
+      </div>
+      <div class="education-form-group">
+        <label>Year:</label>
+        <input type="text" [(ngModel)]="item.year" placeholder="Year Range">
+      </div>
+      <div class="education-form-group">
+        <label>Description:</label>
+        <textarea [(ngModel)]="item.description" placeholder="Description"></textarea>
+      </div>
+      <button class="remove-button" (click)="removeEducation(i)">
+        <i class="fas fa-trash"></i> Remove
+      </button>
     </div>
-    <div class="education-item">
-      <h3>Degree (BSC-Maths) </h3>
-      <p class="degree">Maths, Physics, Computerscience</p>
-      <p class="year">2020 - 2023</p>
-      <p class="description">
-        Major subjects: Mathematics, Physics, Computer Science.
-      </p>
+    
+    <div class="edit-actions">
+      <button class="add-button" (click)="addEducation()">
+        <i class="fas fa-plus"></i> Add Education
+      </button>
+      <button class="save-button" (click)="saveChanges()">
+        <i class="fas fa-save"></i> Save
+      </button>
+      <button class="cancel-button" (click)="cancelEditing()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
     </div>
-    <div class="education-item">
-      <h3>Intermediate</h3>
-      <p class="degree">Maths, Physics, Chemistry</p>
-      <p class="year">2018 - 2020</p>
-      <p class="description">
-        Major subjects: Mathematics, Physics, Chemistry.
-      </p>
+  </div>
+  
+  <!-- Display education section -->
+  <div *ngIf="!isEditing" class="education-list">
+    <div *ngFor="let item of educationItems" class="education-item">
+      <h3>{{ item.institution }}</h3>
+      <p class="degree">{{ item.degree }}</p>
+      <p class="year">{{ item.year }}</p>
+      <p class="description">{{ item.description }}</p>
     </div>
   </div>
 </div>
