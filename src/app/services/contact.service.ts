@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export interface ContactInfo {
   email: string;
@@ -19,7 +20,7 @@ export interface ContactInfo {
   providedIn: 'root'
 })
 export class ContactService {
-  private firebaseBaseUrl = 'https://angulartest-93e44-default-rtdb.asia-southeast1.firebasedatabase.app';
+  private firebaseBaseUrl = environment.firebaseConfig.baseUrl;
   private defaultContactInfo: ContactInfo = {
     email: 'sairam@example.com',
     phone: '+91 9876543210',

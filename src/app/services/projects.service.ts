@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export interface Project {
   title: string;
@@ -17,7 +18,7 @@ export interface Project {
   providedIn: 'root'
 })
 export class ProjectsService {
-  private firebaseBaseUrl = 'https://angulartest-93e44-default-rtdb.asia-southeast1.firebasedatabase.app';
+  private firebaseBaseUrl = environment.firebaseConfig.baseUrl;
   private defaultProjects: Project[] = [
     {
       title: 'Dry Fruits Management',
