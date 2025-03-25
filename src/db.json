@@ -1,0 +1,22 @@
+{
+    "about": {
+      "name": "Sai Ram",
+      "role": "Frontend Developer",
+      "description": "Passionate about creating interactive user experiences with Angular."
+    },
+    "experience": [
+      { "position": "Frontend Developer", "company": "Tech Mindsparc", "duration": "Nov 2024 - Present" }
+    ],
+    "education": [
+      { "degree": "MCA", "institution": "XYZ University", "year": "2024" }
+    ],
+    "skills": ["Angular", "TypeScript", "JavaScript", "HTML", "CSS"],
+    "projects": [
+      { "title": "Interactive Resume", "description": "A dynamic resume built with Angular.", "year": "2025" }
+    ],
+    "achievements": ["Published research paper on AI-driven software development."],
+    "certificates": [
+      { "title": "Business Organisation and Management", "issuedBy": "NPTEL", "year": "2025" }
+    ]
+  }
+  

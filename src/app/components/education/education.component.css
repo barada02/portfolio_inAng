@@ -1,7 +1,5 @@
-/* Projects Section */
-.projects-container {
+.education-container {
   max-width: 800px;
-  text-align: left;
   position: relative;
   padding: 1.5rem;
   border-radius: 10px;
@@ -13,75 +11,48 @@ h2 {
   font-size: 2rem;
   margin-bottom: 2rem;
   color: #ccd6f6;
-  text-align: left;
 }
 
-/* Projects List */
-.projects-list {
+.education-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-/* Project Item */
-.project-item {
+.education-item {
+  margin-bottom: 2.5rem;
   padding: 1.5rem;
   border-radius: 8px;
   background-color: rgba(136, 146, 176, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column; /* Different from skills: column layout */
+  transition: transform 0.3s ease;
 }
 
-.project-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+.education-item:hover {
+  transform: translateX(5px);
 }
 
-/* Project Title */
 h3 {
   color: #64ffda;
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
 
-/* Project Tech Stack */
-.tech-stack {
+.degree {
   color: #ccd6f6;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
 
-/* Project Description */
+.year {
+  color: #8892b0;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
 .description {
   color: #8892b0;
   line-height: 1.6;
   font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* Project Links */
-.project-links {
-  display: flex;
-  gap: 1rem;
-  margin-top: auto;
-}
-
-.github-btn,
-.demo-btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: rgba(100, 255, 218, 0.1);
-  color: #64ffda;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
-}
-
-.github-btn:hover,
-.demo-btn:hover {
-  background-color: rgba(100, 255, 218, 0.2);
 }
 
 /* Edit button styles */
@@ -109,29 +80,29 @@ h3 {
   margin-top: 1rem;
 }
 
-.project-item-edit {
+.education-item-edit {
   background-color: rgba(136, 146, 176, 0.05);
   padding: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   border-radius: 5px;
   border: 1px solid rgba(136, 146, 176, 0.2);
   position: relative;
 }
 
-.project-form-group {
+.education-form-group {
   margin-bottom: 1rem;
   text-align: left;
 }
 
-.project-form-group label {
+.education-form-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: #64ffda;
   font-weight: bold;
 }
 
-.project-form-group input,
-.project-form-group textarea {
+.education-form-group input,
+.education-form-group textarea {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid rgba(136, 146, 176, 0.3);
@@ -141,8 +112,8 @@ h3 {
   font-size: 1rem;
 }
 
-.project-form-group textarea {
-  min-height: 100px;
+.education-form-group textarea {
+  min-height: 80px;
   resize: vertical;
 }
 

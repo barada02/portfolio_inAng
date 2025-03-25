@@ -2,18 +2,27 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ProjectsService, Project } from '../../services/projects.service';
+import { ContactService, ContactInfo } from '../../services/contact.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-contact',
+  standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css'],
-  standalone: true
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.css']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
-  projects: Project[] = [];
+export class ContactComponent implements OnInit, OnDestroy {
+  contactInfo: ContactInfo = {
+    email: '',
+    phone: '',
+    location: '',
+    socialLinks: {
+      github: '',
+      linkedin: '',
+      twitter: ''
+    }
+  };
   isEditing = false;
   isLoading = true;
   error = '';
@@ -22,7 +31,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription | null = null;
   private usernameSubscription: Subscription | null = null;
 
-  constructor(public authService: AuthService, private projectsService: ProjectsService) {
+  constructor(public authService: AuthService, private contactService: ContactService) {
     // Initialize isAdmin from the AuthService
     this.isAdmin = this.authService.isAdmin;
     this.currentUsername = this.authService.currentUsername;
@@ -37,7 +46,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.isAdmin = isAdmin;
       // Reload content when admin status changes
       if (isAdmin) {
-        this.loadProjectsData();
+        this.loadContactData();
       }
     });
 
@@ -47,12 +56,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.currentUsername = username;
       // Reload content when username changes
       if (username) {
-        this.loadProjectsData();
+        this.loadContactData();
       }
     });
 
     // Initial content load
-    this.loadProjectsData();
+    this.loadContactData();
   }
 
   ngOnDestroy() {
@@ -65,30 +74,30 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadProjectsData() {
+  loadContactData() {
     this.isLoading = true;
     this.error = '';
-    // Fetch from Firebase using the ProjectsService
-    this.projectsService.getProjectsData().subscribe(
-      (data: Project[]) => {
+    // Fetch from Firebase using the ContactService
+    this.contactService.getContactData().subscribe(
+      (data: ContactInfo) => {
         this.isLoading = false;
-        if (data && data.length > 0) {
-          this.projects = data;
+        if (data) {
+          this.contactInfo = data;
         } else {
           // If no data in Firebase, use default content
-          this.projects = this.projectsService.getDefaultProjects();
+          this.contactInfo = this.contactService.getDefaultContactInfo();
           // Save default content to Firebase if user is logged in
           if (this.currentUsername) {
-            this.saveProjectsData();
+            this.saveContactData();
           }
         }
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error loading projects data. Please try again later.';
-        console.error('Error fetching projects data:', error);
+        this.error = 'Error loading contact data. Please try again later.';
+        console.error('Error fetching contact data:', error);
         // If error, use default content
-        this.projects = this.projectsService.getDefaultProjects();
+        this.contactInfo = this.contactService.getDefaultContactInfo();
       }
     );
   }
@@ -109,38 +118,25 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     
     this.isLoading = true;
     this.isEditing = false;
-    this.saveProjectsData();
+    this.saveContactData();
   }
 
   cancelEditing() {
     this.isEditing = false;
     // Reload the data to discard changes
-    this.loadProjectsData();
+    this.loadContactData();
   }
 
-  addProject() {
-    this.projects.push({
-      title: '',
-      techStack: '',
-      description: '',
-      date: ''
-    });
-  }
-
-  removeProject(index: number) {
-    this.projects.splice(index, 1);
-  }
-
-  private saveProjectsData() {
-    this.projectsService.saveProjectsData(this.projects).subscribe(
+  private saveContactData() {
+    this.contactService.saveContactData(this.contactInfo).subscribe(
       () => {
         this.isLoading = false;
-        console.log('Projects data saved successfully');
+        console.log('Contact data saved successfully');
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error saving projects data. Please try again later.';
-        console.error('Error saving projects data:', error);
+        this.error = 'Error saving contact data. Please try again later.';
+        console.error('Error saving contact data:', error);
       }
     );
   }

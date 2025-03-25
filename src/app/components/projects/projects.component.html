@@ -1,5 +1,78 @@
-<div class="section" id="projects">
-    <h2>Projects</h2>
-    <!-- Add your projects content here -->
-    <p>Your projects content goes here...</p>
+<div class="section projects-container" id="projects">
+  <h2>Projects</h2>
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+  
+  <!-- Edit button - only visible to admin users -->
+  <button *ngIf="isAdmin && !isEditing" class="edit-button" (click)="enableEditing()">
+    <i class="fas fa-edit"></i> Edit
+  </button>
+  
+  <!-- Editable projects section -->
+  <div *ngIf="isEditing" class="editing-container">
+    <div *ngFor="let project of projects; let i = index" class="project-item-edit">
+      <div class="project-form-group">
+        <label>Project Title:</label>
+        <input type="text" [(ngModel)]="project.title" placeholder="Project Title">
+      </div>
+      
+      <div class="project-form-group">
+        <label>Tech Stack:</label>
+        <input type="text" [(ngModel)]="project.techStack" placeholder="Technologies Used">
+      </div>
+      
+      <div class="project-form-group">
+        <label>Date:</label>
+        <input type="text" [(ngModel)]="project.date" placeholder="Month Year">
+      </div>
+      
+      <div class="project-form-group">
+        <label>Description:</label>
+        <textarea [(ngModel)]="project.description" placeholder="Project Description"></textarea>
+      </div>
+      
+      <div class="project-form-group">
+        <label>GitHub Link (optional):</label>
+        <input type="text" [(ngModel)]="project.githubLink" placeholder="GitHub URL">
+      </div>
+      
+      <div class="project-form-group">
+        <label>Demo Link (optional):</label>
+        <input type="text" [(ngModel)]="project.demoLink" placeholder="Demo URL">
+      </div>
+      
+      <button class="remove-button" (click)="removeProject(i)">
+        <i class="fas fa-trash"></i> Remove
+      </button>
+    </div>
+    
+    <div class="edit-actions">
+      <button class="add-button" (click)="addProject()">
+        <i class="fas fa-plus"></i> Add Project
+      </button>
+      <button class="save-button" (click)="saveChanges()">
+        <i class="fas fa-save"></i> Save
+      </button>
+      <button class="cancel-button" (click)="cancelEditing()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </div>
   </div>
+  
+  <!-- Display projects section -->
+  <div *ngIf="!isEditing" class="projects-list">
+    <div *ngFor="let project of projects" class="project-item">
+      <h3>{{ project.title }}</h3>
+      <p class="tech-stack">{{ project.techStack }} | {{ project.date }}</p>
+      <p class="description">{{ project.description }}</p>
+      <div class="project-links">
+        <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" class="github-btn">
+          🔗 View on GitHub
+        </a>
+        <a *ngIf="project.demoLink" [href]="project.demoLink" target="_blank" class="demo-btn">
+          🚀 Live Demo
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

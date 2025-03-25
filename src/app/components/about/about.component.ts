@@ -2,19 +2,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ProjectsService, Project } from '../../services/projects.service';
+import { AboutService } from '../../services/about.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-about',
+  standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css'],
-  standalone: true
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.css']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
-  projects: Project[] = [];
+export class AboutComponent implements OnInit, OnDestroy {
+  aboutContent = '';
   isEditing = false;
+  editableContent = '';
   isLoading = true;
   error = '';
   isAdmin = false;
@@ -22,8 +23,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription | null = null;
   private usernameSubscription: Subscription | null = null;
 
-  constructor(public authService: AuthService, private projectsService: ProjectsService) {
-    // Initialize isAdmin from the AuthService
+  constructor(public authService: AuthService, private aboutService: AboutService) {
+    // Initialize isAdmin from the AuthService, not directly from localStorage
     this.isAdmin = this.authService.isAdmin;
     this.currentUsername = this.authService.currentUsername;
     console.log('Initial admin state:', this.isAdmin);
@@ -37,7 +38,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.isAdmin = isAdmin;
       // Reload content when admin status changes
       if (isAdmin) {
-        this.loadProjectsData();
+        this.loadAboutContent();
       }
     });
 
@@ -47,12 +48,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.currentUsername = username;
       // Reload content when username changes
       if (username) {
-        this.loadProjectsData();
+        this.loadAboutContent();
       }
     });
 
     // Initial content load
-    this.loadProjectsData();
+    this.loadAboutContent();
   }
 
   ngOnDestroy() {
@@ -65,30 +66,30 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadProjectsData() {
+  loadAboutContent() {
     this.isLoading = true;
     this.error = '';
-    // Fetch from Firebase using the ProjectsService
-    this.projectsService.getProjectsData().subscribe(
-      (data: Project[]) => {
+    // Fetch from Firebase using the AboutService
+    this.aboutService.getAboutContent().subscribe(
+      (data: string) => {
         this.isLoading = false;
-        if (data && data.length > 0) {
-          this.projects = data;
+        if (data) {
+          this.aboutContent = data;
         } else {
           // If no data in Firebase, use default content
-          this.projects = this.projectsService.getDefaultProjects();
+          this.aboutContent = this.aboutService.getDefaultContent();
           // Save default content to Firebase if user is logged in
           if (this.currentUsername) {
-            this.saveProjectsData();
+            this.saveAboutContent();
           }
         }
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error loading projects data. Please try again later.';
-        console.error('Error fetching projects data:', error);
+        this.error = 'Error loading content. Please try again later.';
+        console.error('Error fetching about content:', error);
         // If error, use default content
-        this.projects = this.projectsService.getDefaultProjects();
+        this.aboutContent = this.aboutService.getDefaultContent();
       }
     );
   }
@@ -97,6 +98,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     // Only allow editing if the user is an admin
     if (this.isAdmin) {
       this.isEditing = true;
+      this.editableContent = this.aboutContent;
     }
   }
 
@@ -108,39 +110,26 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     }
     
     this.isLoading = true;
+    this.aboutContent = this.editableContent;
     this.isEditing = false;
-    this.saveProjectsData();
+    this.saveAboutContent();
   }
 
   cancelEditing() {
     this.isEditing = false;
-    // Reload the data to discard changes
-    this.loadProjectsData();
+    this.editableContent = this.aboutContent;
   }
 
-  addProject() {
-    this.projects.push({
-      title: '',
-      techStack: '',
-      description: '',
-      date: ''
-    });
-  }
-
-  removeProject(index: number) {
-    this.projects.splice(index, 1);
-  }
-
-  private saveProjectsData() {
-    this.projectsService.saveProjectsData(this.projects).subscribe(
+  private saveAboutContent() {
+    this.aboutService.saveAboutContent(this.aboutContent).subscribe(
       () => {
         this.isLoading = false;
-        console.log('Projects data saved successfully');
+        console.log('About content saved successfully');
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error saving projects data. Please try again later.';
-        console.error('Error saving projects data:', error);
+        this.error = 'Error saving content. Please try again later.';
+        console.error('Error saving about content:', error);
       }
     );
   }

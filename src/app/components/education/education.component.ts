@@ -2,18 +2,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ProjectsService, Project } from '../../services/projects.service';
+import { EducationService } from '../../services/education.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-education',
+  standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css'],
-  standalone: true
+  templateUrl: './education.component.html',
+  styleUrls: ['./education.component.css']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
-  projects: Project[] = [];
+export class EducationComponent implements OnInit, OnDestroy {
+  educationItems: any[] = [];
   isEditing = false;
   isLoading = true;
   error = '';
@@ -22,7 +22,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription | null = null;
   private usernameSubscription: Subscription | null = null;
 
-  constructor(public authService: AuthService, private projectsService: ProjectsService) {
+  constructor(public authService: AuthService, private educationService: EducationService) {
     // Initialize isAdmin from the AuthService
     this.isAdmin = this.authService.isAdmin;
     this.currentUsername = this.authService.currentUsername;
@@ -37,7 +37,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.isAdmin = isAdmin;
       // Reload content when admin status changes
       if (isAdmin) {
-        this.loadProjectsData();
+        this.loadEducationData();
       }
     });
 
@@ -47,12 +47,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.currentUsername = username;
       // Reload content when username changes
       if (username) {
-        this.loadProjectsData();
+        this.loadEducationData();
       }
     });
 
     // Initial content load
-    this.loadProjectsData();
+    this.loadEducationData();
   }
 
   ngOnDestroy() {
@@ -65,30 +65,30 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadProjectsData() {
+  loadEducationData() {
     this.isLoading = true;
     this.error = '';
-    // Fetch from Firebase using the ProjectsService
-    this.projectsService.getProjectsData().subscribe(
-      (data: Project[]) => {
+    // Fetch from Firebase using the EducationService
+    this.educationService.getEducationData().subscribe(
+      (data: any[]) => {
         this.isLoading = false;
         if (data && data.length > 0) {
-          this.projects = data;
+          this.educationItems = data;
         } else {
           // If no data in Firebase, use default content
-          this.projects = this.projectsService.getDefaultProjects();
+          this.educationItems = this.educationService.getDefaultEducation();
           // Save default content to Firebase if user is logged in
           if (this.currentUsername) {
-            this.saveProjectsData();
+            this.saveEducationData();
           }
         }
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error loading projects data. Please try again later.';
-        console.error('Error fetching projects data:', error);
+        this.error = 'Error loading education data. Please try again later.';
+        console.error('Error fetching education data:', error);
         // If error, use default content
-        this.projects = this.projectsService.getDefaultProjects();
+        this.educationItems = this.educationService.getDefaultEducation();
       }
     );
   }
@@ -109,38 +109,38 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     
     this.isLoading = true;
     this.isEditing = false;
-    this.saveProjectsData();
+    this.saveEducationData();
   }
 
   cancelEditing() {
     this.isEditing = false;
     // Reload the data to discard changes
-    this.loadProjectsData();
+    this.loadEducationData();
   }
 
-  addProject() {
-    this.projects.push({
-      title: '',
-      techStack: '',
-      description: '',
-      date: ''
+  addEducation() {
+    this.educationItems.push({
+      institution: '',
+      degree: '',
+      year: '',
+      description: ''
     });
   }
 
-  removeProject(index: number) {
-    this.projects.splice(index, 1);
+  removeEducation(index: number) {
+    this.educationItems.splice(index, 1);
   }
 
-  private saveProjectsData() {
-    this.projectsService.saveProjectsData(this.projects).subscribe(
+  private saveEducationData() {
+    this.educationService.saveEducationData(this.educationItems).subscribe(
       () => {
         this.isLoading = false;
-        console.log('Projects data saved successfully');
+        console.log('Education data saved successfully');
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error saving projects data. Please try again later.';
-        console.error('Error saving projects data:', error);
+        this.error = 'Error saving education data. Please try again later.';
+        console.error('Error saving education data:', error);
       }
     );
   }

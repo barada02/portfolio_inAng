@@ -1,0 +1,44 @@
+/* Centering "Contact Me" with reduced gap */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #facc15; /* Yellow */
+    margin-bottom: 10px; /* Reduced gap between heading and links */
+}
+
+/* Contact Links - Styled for better appearance */
+.contact-links {
+    display: flex;
+    flex-direction: row; /* Links in one line */
+    justify-content: center;
+    gap: 20px; /* Space between links */
+    margin-top: 0px; /* Further reducing gap */
+}
+
+/* Styling each link */
+.contact-links a {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon & text */
+    padding: 10px 15px;
+    text-decoration: none;
+    color: white;
+    background-color: #1e293b; /* Dark Blue */
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.contact-links a:hover {
+    background-color: #334155; /* Lighter Blue */
+    transform: scale(1.05);
+}
+
+/* Icons inside links */
+.contact-links a img {
+    width: 20px;
+    height: 20px;
+}

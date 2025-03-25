@@ -2,27 +2,28 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ProjectsService, Project } from '../../services/projects.service';
+import { SkillsService, SkillCategory } from '../../services/skills.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-skills',
+  standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css'],
-  standalone: true
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
-  projects: Project[] = [];
+export class SkillsComponent implements OnInit, OnDestroy {
+  skillCategories: SkillCategory[] = [];
   isEditing = false;
   isLoading = true;
   error = '';
   isAdmin = false;
   currentUsername = '';
+  newSkill = '';
   private authSubscription: Subscription | null = null;
   private usernameSubscription: Subscription | null = null;
 
-  constructor(public authService: AuthService, private projectsService: ProjectsService) {
+  constructor(public authService: AuthService, private skillsService: SkillsService) {
     // Initialize isAdmin from the AuthService
     this.isAdmin = this.authService.isAdmin;
     this.currentUsername = this.authService.currentUsername;
@@ -37,7 +38,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.isAdmin = isAdmin;
       // Reload content when admin status changes
       if (isAdmin) {
-        this.loadProjectsData();
+        this.loadSkillsData();
       }
     });
 
@@ -47,12 +48,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.currentUsername = username;
       // Reload content when username changes
       if (username) {
-        this.loadProjectsData();
+        this.loadSkillsData();
       }
     });
 
     // Initial content load
-    this.loadProjectsData();
+    this.loadSkillsData();
   }
 
   ngOnDestroy() {
@@ -65,30 +66,30 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadProjectsData() {
+  loadSkillsData() {
     this.isLoading = true;
     this.error = '';
-    // Fetch from Firebase using the ProjectsService
-    this.projectsService.getProjectsData().subscribe(
-      (data: Project[]) => {
+    // Fetch from Firebase using the SkillsService
+    this.skillsService.getSkillsData().subscribe(
+      (data: SkillCategory[]) => {
         this.isLoading = false;
         if (data && data.length > 0) {
-          this.projects = data;
+          this.skillCategories = data;
         } else {
           // If no data in Firebase, use default content
-          this.projects = this.projectsService.getDefaultProjects();
+          this.skillCategories = this.skillsService.getDefaultSkills();
           // Save default content to Firebase if user is logged in
           if (this.currentUsername) {
-            this.saveProjectsData();
+            this.saveSkillsData();
           }
         }
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error loading projects data. Please try again later.';
-        console.error('Error fetching projects data:', error);
+        this.error = 'Error loading skills data. Please try again later.';
+        console.error('Error fetching skills data:', error);
         // If error, use default content
-        this.projects = this.projectsService.getDefaultProjects();
+        this.skillCategories = this.skillsService.getDefaultSkills();
       }
     );
   }
@@ -109,38 +110,47 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     
     this.isLoading = true;
     this.isEditing = false;
-    this.saveProjectsData();
+    this.saveSkillsData();
   }
 
   cancelEditing() {
     this.isEditing = false;
     // Reload the data to discard changes
-    this.loadProjectsData();
+    this.loadSkillsData();
   }
 
-  addProject() {
-    this.projects.push({
-      title: '',
-      techStack: '',
-      description: '',
-      date: ''
+  addCategory() {
+    this.skillCategories.push({
+      name: '',
+      skills: []
     });
   }
 
-  removeProject(index: number) {
-    this.projects.splice(index, 1);
+  removeCategory(index: number) {
+    this.skillCategories.splice(index, 1);
   }
 
-  private saveProjectsData() {
-    this.projectsService.saveProjectsData(this.projects).subscribe(
+  addSkill(categoryIndex: number) {
+    if (this.newSkill.trim()) {
+      this.skillCategories[categoryIndex].skills.push(this.newSkill.trim());
+      this.newSkill = '';
+    }
+  }
+
+  removeSkill(categoryIndex: number, skillIndex: number) {
+    this.skillCategories[categoryIndex].skills.splice(skillIndex, 1);
+  }
+
+  private saveSkillsData() {
+    this.skillsService.saveSkillsData(this.skillCategories).subscribe(
       () => {
         this.isLoading = false;
-        console.log('Projects data saved successfully');
+        console.log('Skills data saved successfully');
       },
       (error) => {
         this.isLoading = false;
-        this.error = 'Error saving projects data. Please try again later.';
-        console.error('Error saving projects data:', error);
+        this.error = 'Error saving skills data. Please try again later.';
+        console.error('Error saving skills data:', error);
       }
     );
   }

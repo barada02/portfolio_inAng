@@ -1,0 +1,33 @@
+<div class="about-container">
+  <h2>About Me</h2>
+  
+  <!-- Edit Button - Only visible when admin is logged in -->
+  <button *ngIf="isAdmin" class="edit-button" (click)="enableEditing()">
+    <i class="fas fa-edit"></i> Edit
+  </button>
+  
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-indicator">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+  
+  <!-- View Mode -->
+  <div class="about-content" *ngIf="!isEditing && !isLoading">
+    <p>{{ aboutContent }}</p>
+  </div>
+  
+  <!-- Edit Mode -->
+  <div class="about-edit" *ngIf="isEditing && !isLoading">
+    <textarea [(ngModel)]="editableContent" rows="6"></textarea>
+    <div class="edit-actions">
+      <button class="save-button" (click)="saveChanges()">Save</button>
+      <button class="cancel-button" (click)="cancelEditing()">Cancel</button>
+    </div>
+  </div>
+</div>

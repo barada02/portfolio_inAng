@@ -1,36 +1,150 @@
-<div class="portfolio-container">
-  <!-- Left Sidebar -->
-  <div class="sidebar">
-    <div class="profile">
-      <img src="https://cdn-icons-png.freepik.com/256/4803/4803060.png?semt=ais_hybrid" alt="Profile" class="profile-img">
-      <h2>Your Name</h2>
-      <p>Web Developer</p>
-    </div>
-    <nav class="navigation">
-      <a 
-        *ngFor="let section of sections" 
-        [href]="'#' + section.id"
-        [class.active-section]="currentSection === section.id"
-        (click)="scrollToSection($event, section.id)"
-      >
-        {{ section.name }}
-      </a>
-    </nav>
+<!-- Home Section -->
+<div class="home-section" *ngIf="!showPortfolio">
+  <div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
   </div>
+  <img [src]="profileInfo.profileImage" alt="Profile" class="profile-pic">
+  <h1>Welcome to My Interactive Resume</h1>
+  <button (click)="showResume()">View Resume</button>
+</div>
 
-  <!-- Right Content -->
-  <div class="content" #contentSection>
-    <section id="projects" class="section">
-      <app-projects></app-projects>
+<!-- Portfolio Page -->
+<!---Left Sidebar-->
+<div class="portfolio-container" *ngIf="showPortfolio">
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <div class="profile">
+      <!-- Edit button - only visible to admin users -->
+      <button *ngIf="authService.isAdmin && !isEditingProfile" class="edit-profile-button" (click)="enableProfileEditing()">
+        <i class="fas fa-edit"></i>
+      </button>
+      
+      <!-- Profile editing form -->
+      <div *ngIf="isEditingProfile" class="profile-editing">
+        <div class="profile-form-group">
+          <label>Name:</label>
+          <input type="text" [(ngModel)]="profileInfo.name" placeholder="Your name">
+        </div>
+        
+        <div class="profile-form-group">
+          <label>Title:</label>
+          <input type="text" [(ngModel)]="profileInfo.title" placeholder="Your professional title">
+        </div>
+        
+        <div class="profile-form-group">
+          <label>Profile Image URL:</label>
+          <input type="text" [(ngModel)]="profileInfo.profileImage" placeholder="Image URL">
+        </div>
+        
+        <div class="profile-edit-actions">
+          <button class="save-button" (click)="saveProfileChanges()">
+            <i class="fas fa-save"></i> Save
+          </button>
+          <button class="cancel-button" (click)="cancelProfileEditing()">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+        
+        <div *ngIf="profileError" class="profile-error-message">{{ profileError }}</div>
+      </div>
+      
+      <!-- Display profile -->
+      <div *ngIf="!isEditingProfile">
+        <img [src]="profileInfo.profileImage" class="profile-img-small" alt="Profile">
+        <h2 class="profile-name">{{ profileInfo.name }}</h2>
+        <p *ngIf="profileInfo.title" class="profile-title">{{ profileInfo.title }}</p>
+      </div>
+    </div>
+    <div class="navigation">
+      <a (click)="scrollToSection('about')" [class.active-section]="activeSection === 'about'">
+        About
+      </a>
+      <a (click)="scrollToSection('experience')" [class.active-section]="activeSection === 'experience'">
+        Experience
+      </a>
+      <a (click)="scrollToSection('education')" [class.active-section]="activeSection === 'education'">
+        Education
+      </a>
+      <a (click)="scrollToSection('skills')" [class.active-section]="activeSection === 'skills'">
+        Skills
+      </a>
+      <a (click)="scrollToSection('projects')" [class.active-section]="activeSection === 'projects'">
+        Projects
+      </a>
+      <a (click)="scrollToSection('contact')" [class.active-section]="activeSection === 'contact'">
+        Contact
+      </a>
+      <div class="admin-button-container">
+        <button *ngIf="!authService.isAdmin" class="admin-button" (click)="showAdminLoginModal()">Admin</button>
+        <button *ngIf="authService.isAdmin" class="admin-button logout-button" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dynamic Content -->
+  <div class="content">
+    <section id="about" data-section="about">
+      <app-about></app-about>
     </section>
-    <section id="certificates" class="section">
-      <app-certificates></app-certificates>
-    </section>
-    <section id="experience" class="section">
+    <section id="experience" data-section="experience">
       <app-experience></app-experience>
     </section>
-    <section id="social" class="section">
-      <app-social></app-social>
+    <section id="education" data-section="education">
+      <app-education></app-education>
     </section>
+    <section id="skills" data-section="skills">
+      <app-skills></app-skills>
+    </section>
+    <section id="projects" data-section="projects">
+      <app-projects></app-projects>
+    </section>
+    <section id="contact" data-section="contact">
+      <app-contact></app-contact>
+    </section>
+  </div>
+</div>
+
+<!-- Admin Login/Signup Modal -->
+<div class="admin-login-modal" *ngIf="showAdminLogin">
+  <div class="admin-login-box">
+    <h2>{{ isSignup ? 'Admin Signup' : 'Admin Login' }}</h2>
+    
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading-indicator">
+      <div class="spinner"></div>
+      <p>Processing...</p>
+    </div>
+    
+    <div *ngIf="!isLoading">
+      <!-- Full Name field (only shown during signup) -->
+      <div class="form-group" *ngIf="isSignup">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" [(ngModel)]="fullName" placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" [(ngModel)]="username" placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="password" placeholder="Enter password">
+      </div>
+      <div class="error-message" *ngIf="loginError">
+        {{ loginError }}
+      </div>
+      <div class="button-group">
+        <button class="login-button" (click)="login()">{{ isSignup ? 'Sign Up' : 'Login' }}</button>
+        <button class="cancel-button" (click)="closeAdminLoginModal()">Cancel</button>
+      </div>
+      <div class="toggle-signup">
+        <a (click)="toggleSignupMode()">
+          {{ isSignup ? 'Already have an account? Login' : 'Need an account? Sign Up' }}
+        </a>
+      </div>
+    </div>
   </div>
 </div>

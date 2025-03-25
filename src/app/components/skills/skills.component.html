@@ -1,0 +1,65 @@
+<div class="skills-container">
+  <h2>Skills</h2>
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+  
+  <!-- Edit button - only visible to admin users -->
+  <button *ngIf="isAdmin && !isEditing" class="edit-button" (click)="enableEditing()">
+    <i class="fas fa-edit"></i> Edit
+  </button>
+  
+  <!-- Editable skills section -->
+  <div *ngIf="isEditing" class="editing-container">
+    <div *ngFor="let category of skillCategories; let i = index" class="skill-category-edit">
+      <div class="skill-form-group">
+        <label>Category Name:</label>
+        <input type="text" [(ngModel)]="category.name" placeholder="Category Name">
+      </div>
+      
+      <div class="skills-list-edit">
+        <h4>Skills:</h4>
+        <ul>
+          <li *ngFor="let skill of category.skills; let j = index" class="skill-item-edit">
+            {{ skill }}
+            <button class="remove-skill-button" (click)="removeSkill(i, j)">
+              <i class="fas fa-times"></i>
+            </button>
+          </li>
+        </ul>
+        
+        <div class="add-skill-form">
+          <input type="text" [(ngModel)]="newSkill" placeholder="New Skill" (keyup.enter)="addSkill(i)">
+          <button class="add-skill-button" (click)="addSkill(i)">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+      </div>
+      
+      <button class="remove-button" (click)="removeCategory(i)">
+        <i class="fas fa-trash"></i> Remove Category
+      </button>
+    </div>
+    
+    <div class="edit-actions">
+      <button class="add-category-button" (click)="addCategory()">
+        <i class="fas fa-plus"></i> Add Category
+      </button>
+      <button class="save-button" (click)="saveChanges()">
+        <i class="fas fa-save"></i> Save
+      </button>
+      <button class="cancel-button" (click)="cancelEditing()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </div>
+  </div>
+  
+  <!-- Display skills section -->
+  <div *ngIf="!isEditing" class="skills-grid">
+    <div *ngFor="let category of skillCategories" class="skill-category">
+      <h3>{{ category.name }}</h3>
+      <ul>
+        <li *ngFor="let skill of category.skills">{{ skill }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
